@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>辰龙操作系统(ChenLongOS) - 国产机器人OS创新引领者</title>
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary-color: #0066cc;
+            --secondary-color: #003366;
+            --accent-color: #00aaff;
+            --light-color: #f5f9ff;
+            --dark-color: #333333;
+            --gray-color: #666666;
+            --light-gray: #e6e6e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        body {
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 18px;
+            color: var(--gray-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .nav-menu {
+            display: flex;
+        }
+        
+        .nav-item {
+            margin-left: 30px;
+            position: relative;
+        }
+        
+        .nav-link {
+            font-weight: 500;
+            padding: 10px 0;
+            transition: color 0.3s;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+        
+        .dropdown-item:hover {
+            background-color: var(--light-color);
+        }
+        
+        .mobile-toggle {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Hero区域样式 */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .hero-btns .btn {
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        .hero-btns .btn-outline {
+            background-color: transparent;
+            border-color: white;
+            color: white;
+        }
+        
+        .hero-btns .btn:hover {
+            background-color: var(--light-color);
+        }
+        
+        .hero-btns .btn-outline:hover {
+            background-color: white;
+            color: var(--primary-color);
+        }
+        
+        .hero-visual {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 60%;
+            background: url('https://via.placeholder.com/800x600') no-repeat center center;
+            background-size: cover;
+        }
+        
+        /* 核心优势样式 */
+        .advantages {
+            background-color: var(--light-color);
+        }
+        
+        .advantage-cards {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+        }
+        
+        .advantage-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .advantage-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .advantage-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--light-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: var(--primary-color);
+            font-size: 36px;
+        }
+        
+        .advantage-card h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .advantage-card p {
+            color: var(--gray-color);
+        }
+        
+        /* 场景应用样式 */
+        .scenarios {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .scenario-card {
+            flex: 1;
+            min-width: 300px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .scenario-img {
+            height: 200px;
+            background-color: #ddd;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .scenario-content {
+            padding: 30px;
+        }
+        
+        .scenario-content h3 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+        }
+        
+        .scenario-content p {
+            color: var(--gray-color);
+            margin-bottom: 20px;
+        }
+        
+        /* 合作伙伴样式 */
+        .partners {
+            background-color: var(--light-color);
+        }
+        
+        .partner-logos {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+        }
+        
+        .partner-logo {
+            height: 60px;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-logo:hover {
+            filter: grayscale(0);
+            opacity: 1;
+        }
+        
+        /* 底部样式 */
+        footer {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ccc;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .contact-info li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-icon {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .social-link:hover {
+            background-color: var(--accent-color);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+            font-size: 14px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .advantage-cards {
+                flex-direction: column;
+            }
+            
+            .mobile-toggle {
+                display: block;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: white;
+                flex-direction: column;
+                align-items: center;
+                padding-top: 50px;
+                transition: left 0.3s ease;
+            }
+            
+            .nav-menu.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 15px 0;
+            }
+            
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                display: none;
+            }
+            
+            .nav-item:hover .dropdown-menu {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <!-- 这里应该放置logo图片 -->
+                    <h1>辰龙OS</h1>
+                </div>
+                
+                <div class="mobile-toggle">☰</div>
+                
+                <ul class="nav-menu">
+                    <li class="nav-item"><a href="#home" class="nav-link">首页</a></li>
+                    <li class="nav-item">
+                        <a href="#about" class="nav-link">关于我们</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#brand" class="dropdown-item">品牌理念</a></li>
+                            <li><a href="#history" class="dropdown-item">发展历程</a></li>
+                            <li><a href="#technology" class="dropdown-item">技术实力</a></li>
+                            <li><a href="#qualifications" class="dropdown-item">资质荣誉</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a href="#products" class="nav-link">产品中心</a></li>
+                    <li class="nav-item"><a href="#solutions" class="nav-link">解决方案</a></li>
+                    <li class="nav-item"><a href="#community" class="nav-link">生态社区</a></li>
+                    <li class="nav-item"><a href="#partners" class="nav-link">合作伙伴</a></li>
+                    <li class="nav-item"><a href="#support" class="nav-link">支持与服务</a></li>
+                    <li class="nav-item">
+                        <a href="#purchase" class="nav-link">采购通道</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#education-purchase" class="dropdown-item">教育采购</a></li>
+                            <li><a href="#industrial-purchase" class="dropdown-item">工业采购</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero区域 -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1>辰龙操作系统(ChenLongOS)<br>国产机器人OS创新引领者</h1>
+                <p>技术筑基、场景破局、生态共赢，赋能教育与工业智能升级</p>
+                <div class="hero-btns">
+                    <a href="#purchase" class="btn">立即采购</a>
+                    <a href="#trial" class="btn btn-outline">申请试用</a>
+                    <a href="#community" class="btn btn-outline">加入生态</a>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <!-- 这里将放置动态展示的教育机器人套件实验场景、工业轻型机器人作业画面、开发者社区协作界面 -->
+        </div>
+    </section>
+
+    <!-- 核心优势板块 -->
+    <section class="section advantages">
+        <div class="container">
+            <div class="section-title">
+                <h2>核心优势</h2>
+                <p>聚焦教育与工业双场景，提供低成本、高可靠的机器人操作系统解决方案，构建全链路生态服务体系</p>
+            </div>
+            <div class="advantage-cards">
+                <div class="advantage-card">
+                    <div class="advantage-icon">🔒</div>
+                    <h3>安全稳定</h3>
+                    <p>基于Rust语言特性，提供企业级安全防护与稳定运行保障</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🧠</div>
+                    <h3>AI算力</h3>
+                    <p>NPU适配优化，提供强大的AI计算能力，支持复杂场景应用</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🌐</div>
+                    <h3>开源兼容</h3>
+                    <p>多架构支持，兼容主流硬件平台，构建开放生态体系</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 场景应用板块 -->
+    <section class="section" id="solutions">
+        <div class="container">
+            <div class="section-title">
+                <h2>场景应用</h2>
+                <p>覆盖教育、工业及生态赋能三大领域，提供全方位解决方案</p>
+            </div>
+            <div class="scenarios">
+                <div class="scenario-card">
+                    <div class="scenario-img" style="background-image: url('https://via.placeholder.com/400x200');"></div>
+                    <div class="scenario-content">
+                        <h3>教育场景</h3>
+                        <p>机器人教学、创客教育、AI启蒙，配备教学套件实物图+课堂应用场景图</p>
+                        <a href="#" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+                <div class="scenario-card">
+                    <div class="scenario-img" style="background-image: url('https://via.placeholder.com/400x200');"></div>
+                    <div class="scenario-content">
+                        <h3>工业场景</h3>
+                        <p>物流分拣、移动作业、小型装配，配备工业控制器产品图+实际应用场景图</p>
+                        <a href="#" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+                <div class="scenario-card">
+                    <div class="scenario-img" style="background-image: url('https://via.placeholder.com/400x200');"></div>
+                    <div class="scenario-content">
+                        <h3>生态赋能</h3>
+                        <p>开发者创新、第三方适配、行业定制，配备社区互动截图+生态配件展示</p>
+                        <a href="#" class="btn btn-outline">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 合作伙伴展示 -->
+    <section class="section partners">
+        <div class="container">
+            <div class="section-title">
+                <h2>合作伙伴</h2>
+                <p>与众多高校、企业及生态组织建立深度合作关系</p>
+            </div>
+            <div class="partner-logos">
+                <!-- 高校合作伙伴 -->
+                <img src="https://via.placeholder.com/150x60" alt="清华大学" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60" alt="重点高校" class="partner-logo">
+                
+                <!-- 企业伙伴 -->
+                <img src="https://via.placeholder.com/150x60" alt="物流企业" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60" alt="工业自动化" class="partner-logo">
+                
+                <!-- 生态联盟 -->
+                <img src="https://via.placeholder.com/150x60" alt="信创产业联盟" class="partner-logo">
+                <img src="https://via.placeholder.com/150x60" alt="开源社区" class="partner-logo">
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部信息 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>关于我们</h3>
+                    <p>辰龙操作系统(ChenLongOS)是专注于机器人领域的国产操作系统，致力于通过技术创新赋能教育与工业智能化升级。</p>
+                </div>
+                <div class="footer-column">
+                    <h3>联系方式</h3>
+                    <ul class="contact-info">
+                        <li><span class="contact-icon">📞</span> 400-XXX-XXXX 技术热线</li>
+                        <li><span class="contact-icon">✉️</span> contact@chenlongos.com</li>
+                        <li><span class="contact-icon">📍</span> 北京市海淀区XXX科技园</li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>官方账号</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link">B</a>
+                        <a href="#" class="social-link">抖</a>
+                        <a href="#" class="social-link">G</a>
+                        <a href="#" class="social-link">微</a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>快速链接</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">隐私政策</a></li>
+                        <li><a href="#">服务条款</a></li>
+                        <li><a href="#">网站地图</a></li>
+                        <li><a href="#">招聘信息</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2023 辰龙操作系统(ChenLongOS) 版权所有 | 京ICP备XXXXXX号</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 移动端导航菜单切换
+        document.querySelector('.mobile-toggle').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+        
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if(targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if(targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // 移动端点击后关闭菜单
+                    if(window.innerWidth <= 992) {
+                        document.querySelector('.nav-menu').classList.remove('active');
+                    }
+                }
+            });
+        });
+        
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if(window.scrollY > 100) {
+                header.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.backgroundColor = 'white';
+                header.style.backdropFilter = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
